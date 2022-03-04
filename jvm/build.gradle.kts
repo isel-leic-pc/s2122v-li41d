@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
-    application
 }
 
 group = "pt.isel.pc"
@@ -36,10 +35,6 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
 
-application {
-    mainClass.set("MainKt")
-}
-
 val outputDir = "${project.buildDir}/reports/ktlint/"
 val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
 val ktlintCheck by tasks.creating(JavaExec::class) {
@@ -54,4 +49,11 @@ val ktlintCheck by tasks.creating(JavaExec::class) {
 
 tasks.named("check") {
     dependsOn("ktlintCheck")
+}
+
+// Use the following to run:
+// java -cp "build/libs/*:build/classes/kotlin/main" <package>.<class-name>Kt
+tasks.register<Copy>("packLibs") {
+    from(configurations.runtimeClasspath)
+    into("build/libs")
 }
