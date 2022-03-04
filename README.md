@@ -1,2 +1,4 @@
-# s2122v-li51d
-Summer Semester - 2021/2022
+# Concurrent Programming - 2021/2022 - LI41D
+
+
+
