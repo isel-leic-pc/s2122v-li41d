@@ -75,7 +75,7 @@ class ThreadingHazardsTests {
         private var head: Node<T>? = null
 
         fun push(value: T) {
-            head = Node(value, head)
+            head = Node(item = value, next = head)
         }
 
         fun pop(): T? {
@@ -124,7 +124,8 @@ class ThreadingHazardsTests {
      */
 
     // Here the map is "thread-safe" and the counter is also "thread-safe"
-    private val map: MutableMap<Int, AtomicInteger> = Collections.synchronizedMap(mutableMapOf<Int, AtomicInteger>())
+    private val map: MutableMap<Int, AtomicInteger> =
+        Collections.synchronizedMap(mutableMapOf<Int, AtomicInteger>())
 
     @Test
     fun `loosing increments with a synchronized map and atomics`() {
