@@ -34,8 +34,11 @@ typedef struct uthread_context
 // Represents a sleep request
 typedef struct sleep_request
 {
+  // sleep deadline
   uint32_t end;
+  // thread that called sleep
   uthread_t *thread;
+  // list entry so that requests can be added to lists
   list_entry_t list_entry;
 } sleep_request_t;
 

@@ -16,7 +16,8 @@ val ktlint by configurations.creating
 dependencies {
 
     implementation("org.slf4j:slf4j-api:1.7.36")
-    implementation("org.slf4j:slf4j-simple:1.7.36")
+    implementation("org.slf4j:slf4j-simple:2.0.0-alpha7")
+    implementation("org.eclipse.jetty:jetty-servlet:10.0.8")
 
     testImplementation(kotlin("test"))
 
