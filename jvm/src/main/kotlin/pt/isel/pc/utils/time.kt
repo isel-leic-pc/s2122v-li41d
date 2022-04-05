@@ -7,6 +7,8 @@ import kotlin.time.toDuration
 
 fun Duration.isZero() = this.inWholeMilliseconds == 0L
 
+fun Duration.noWait() = this.inWholeMilliseconds <= 0
+
 class MutableTimeout(var duration: Duration) {
     val elapsed: Boolean
         get() = nanos <= 0
