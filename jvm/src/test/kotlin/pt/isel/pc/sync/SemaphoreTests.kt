@@ -35,6 +35,7 @@ class SemaphoreTests {
         }
         testHelper.join()
     }
+
     @Test
     fun `semaphore provides all available units`() {
 
@@ -52,9 +53,9 @@ class SemaphoreTests {
                     assertTrue(newValue >= 0, "newValue ($newValue) must not be negative")
                     try {
                         cyclicBarrier.await(500, TimeUnit.MILLISECONDS)
-                    }catch(_: TimeoutException) {
+                    } catch (_: TimeoutException) {
                         assertTrue(isDone(), "Barrier can can only timeout when test is about to end")
-                    }catch(_: BrokenBarrierException) {
+                    } catch (_: BrokenBarrierException) {
                         assertTrue(isDone(), "Barrier can can only break when test is about to end")
                     }
                     counter.addAndGet(1)
