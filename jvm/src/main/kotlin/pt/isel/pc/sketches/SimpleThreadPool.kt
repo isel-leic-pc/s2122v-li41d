@@ -4,12 +4,11 @@ import pt.isel.pc.utils.NodeLinkedList
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-
 class SimpleThreadPool(
     private val maxThreads: Int
 ) {
 
-    private val lock = ReentrantLock();
+    private val lock = ReentrantLock()
     private val workItems = NodeLinkedList<Runnable>()
     private var nOfWorkerThreads = 0
 
@@ -19,7 +18,6 @@ class SimpleThreadPool(
             nOfWorkerThreads += 1
             Thread {
                 workerLoop(workItem)
-
             }.start()
         } else {
             workItems.enqueue(workItem)
@@ -45,7 +43,7 @@ class SimpleThreadPool(
         var currentRunnable = firstRunnable
         while (true) {
             currentRunnable.run()
-            currentRunnable = when(val result = getNextWorkItem()) {
+            currentRunnable = when (val result = getNextWorkItem()) {
                 is GetWorkItemResult.WorkItem -> result.workItem
                 GetWorkItemResult.Exit -> return
             }

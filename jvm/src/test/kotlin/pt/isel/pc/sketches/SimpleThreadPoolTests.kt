@@ -5,7 +5,6 @@ import java.util.Collections
 import java.util.concurrent.CountDownLatch
 import kotlin.test.assertEquals
 
-
 class SimpleThreadPoolTests {
 
     @Test
@@ -25,6 +24,6 @@ class SimpleThreadPoolTests {
         }
 
         countDownLatch.await()
-        assertEquals(1, threadNameSet.size)
+        assertEquals(2, threadNameSet.size)
     }
 }
