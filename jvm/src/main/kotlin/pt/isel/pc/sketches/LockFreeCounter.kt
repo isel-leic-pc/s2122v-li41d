@@ -7,7 +7,7 @@ class LockFreeCounter {
     private val counter = AtomicInteger(0)
 
     fun inc() {
-        while(true) {
+        while (true) {
             val observed = counter.get()
             val nextValue = observed + 1
             if (counter.compareAndSet(observed, nextValue)) {
@@ -18,27 +18,22 @@ class LockFreeCounter {
     }
 
     fun dec() {
-        while(true) {
+        while (true) {
             val observed = counter.get()
             val nextValue = observed - 1
-            if(counter.compareAndSet(observed, nextValue)) {
+            if (counter.compareAndSet(observed, nextValue)) {
                 return
             }
             // retry
         }
     }
 
-    
-
     fun wrongIncrement() {
-        while(true) {
+        while (true) {
             if (counter.compareAndSet(counter.get(), counter.get() + 1)) {
-                return;
+                return
             }
             // retry
         }
     }
-
-
-
 }
