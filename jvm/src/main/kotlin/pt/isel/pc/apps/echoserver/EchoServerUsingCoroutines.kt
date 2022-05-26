@@ -19,7 +19,6 @@ private fun main() {
     runBlocking {
         server.acceptLoop()
     }
-
 }
 
 class EchoServerUsingCoroutines {
@@ -58,23 +57,25 @@ class EchoServerUsingCoroutines {
     companion object {
         private val logger = LoggerFactory.getLogger(EchoServerUsingCoroutines::class.java)
     }
-
 }
 
 suspend fun AsynchronousSocketChannel.readAsync(buffer: ByteBuffer): Int {
 
     val res = suspendCoroutine<Int> { continuation ->
-        this.read(buffer, Unit, object : CompletionHandler<Int, Unit> {
+        this.read(
+            buffer,
+            Unit,
+            object : CompletionHandler<Int, Unit> {
 
-            override fun completed(result: Int, attachment: Unit) {
-                continuation.resume(result)
+                override fun completed(result: Int, attachment: Unit) {
+                    continuation.resume(result)
+                }
+
+                override fun failed(exc: Throwable, attachment: Unit) {
+                    continuation.resumeWithException(exc)
+                }
             }
-
-            override fun failed(exc: Throwable, attachment: Unit) {
-                continuation.resumeWithException(exc)
-            }
-
-        })
+        )
     }
     return res
 }
@@ -84,17 +85,20 @@ suspend fun AsynchronousSocketChannel.writeAsync(buffer: ByteBuffer): Int {
     var counter = 0
     while (buffer.hasRemaining()) {
         counter += suspendCoroutine<Int> { continuation ->
-            this.write(buffer, Unit, object : CompletionHandler<Int, Unit> {
+            this.write(
+                buffer,
+                Unit,
+                object : CompletionHandler<Int, Unit> {
 
-                override fun completed(result: Int, attachment: Unit) {
-                    continuation.resume(result)
+                    override fun completed(result: Int, attachment: Unit) {
+                        continuation.resume(result)
+                    }
+
+                    override fun failed(exc: Throwable, attachment: Unit) {
+                        continuation.resumeWithException(exc)
+                    }
                 }
-
-                override fun failed(exc: Throwable, attachment: Unit) {
-                    continuation.resumeWithException(exc)
-                }
-
-            })
+            )
         }
     }
     return counter
@@ -102,16 +106,18 @@ suspend fun AsynchronousSocketChannel.writeAsync(buffer: ByteBuffer): Int {
 
 suspend fun AsynchronousServerSocketChannel.acceptAsync(): AsynchronousSocketChannel {
     val socket: AsynchronousSocketChannel = suspendCoroutine<AsynchronousSocketChannel> { continuation ->
-        this.accept(Unit, object : CompletionHandler<AsynchronousSocketChannel, Unit> {
-            override fun completed(result: AsynchronousSocketChannel, attachment: Unit?) {
-                continuation.resume(result)
-            }
+        this.accept(
+            Unit,
+            object : CompletionHandler<AsynchronousSocketChannel, Unit> {
+                override fun completed(result: AsynchronousSocketChannel, attachment: Unit?) {
+                    continuation.resume(result)
+                }
 
-            override fun failed(exc: Throwable, attachment: Unit?) {
-                continuation.resumeWithException(exc)
+                override fun failed(exc: Throwable, attachment: Unit?) {
+                    continuation.resumeWithException(exc)
+                }
             }
-        })
+        )
     }
     return socket
 }
-

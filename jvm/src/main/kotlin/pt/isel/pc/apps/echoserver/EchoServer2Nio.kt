@@ -19,17 +19,21 @@ private val logger = LoggerFactory.getLogger("main")
 
 private fun main() {
     val countDownLatch = CountDownLatch(1)
-    val echoServer = EchoServer2Nio("127.0.0.1", 8080, object : CompletionHandler<Unit, Unit> {
-        override fun completed(result: Unit, attachment: Unit) {
-            logger.info("Server completed successfully")
-            countDownLatch.countDown()
-        }
+    val echoServer = EchoServer2Nio(
+        "127.0.0.1",
+        8080,
+        object : CompletionHandler<Unit, Unit> {
+            override fun completed(result: Unit, attachment: Unit) {
+                logger.info("Server completed successfully")
+                countDownLatch.countDown()
+            }
 
-        override fun failed(exc: Throwable, attachment: Unit) {
-            logger.error("Server completed with error", exc)
-            countDownLatch.countDown()
+            override fun failed(exc: Throwable, attachment: Unit) {
+                logger.error("Server completed with error", exc)
+                countDownLatch.countDown()
+            }
         }
-    })
+    )
     echoServer.start()
     logger.info("Waiting for key")
     readln()

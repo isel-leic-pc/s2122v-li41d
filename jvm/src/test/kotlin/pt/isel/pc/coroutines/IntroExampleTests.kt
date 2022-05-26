@@ -21,9 +21,9 @@ class IntroExampleTests {
 
     suspend fun g() {
         logger.info("hello")
-        //delay(1_000)
+        // delay(1_000)
         mydelay(1_000)
-        //Thread.sleep(1_000)
+        // Thread.sleep(1_000)
         logger.info("world")
     }
 
@@ -36,14 +36,13 @@ class IntroExampleTests {
     }
 
     @Test
-    fun `intro example with coroutines`(){
+    fun `intro example with coroutines`() {
         runBlocking(dispatcher) {
             repeat(2) {
-                launch(block={g()})
+                launch(block = { g() })
             }
         }
     }
-
 }
 
 private val logger = LoggerFactory.getLogger(IntroExampleTests::class.java)
@@ -53,7 +52,7 @@ val scheduledExecutor: ScheduledExecutorService =
 
 val dispatcher = Executors.newFixedThreadPool(2).asCoroutineDispatcher()
 
-suspend fun mydelay(ms: Long) : Unit {
+suspend fun mydelay(ms: Long) {
     logger.info("mydelay: start")
     // scheme: call with current continuation
     suspendCoroutine<Unit> { continuation ->

@@ -6,9 +6,8 @@ class HowManyThreadsTest {
 
     @Test
     fun createThreadsTest() {
-        repeat(10_000) {
+        repeat(1_000) {
             Thread { Thread.sleep(1000) }.start()
         }
     }
-
 }
