@@ -1,5 +1,7 @@
 package pt.isel.pc.apps.echoserver
 
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -72,6 +74,36 @@ suspend fun AsynchronousSocketChannel.readAsync(buffer: ByteBuffer): Int {
                 }
 
                 override fun failed(exc: Throwable, attachment: Unit) {
+                    continuation.resumeWithException(exc)
+                }
+            }
+        )
+    }
+    return res
+}
+
+@OptIn(InternalCoroutinesApi::class)
+suspend fun AsynchronousSocketChannel.readAsync2(buffer: ByteBuffer): Int {
+    val socket = this
+    val res = suspendCoroutine<Int> { continuation ->
+        val handle = continuation.context[Job]?.invokeOnCompletion(
+            onCancelling = true,
+            handler = {
+                socket.close()
+            }
+        )
+        this.read(
+            buffer,
+            Unit,
+            object : CompletionHandler<Int, Unit> {
+
+                override fun completed(result: Int, attachment: Unit) {
+                    handle?.dispose()
+                    continuation.resume(result)
+                }
+
+                override fun failed(exc: Throwable, attachment: Unit) {
+                    handle?.dispose()
                     continuation.resumeWithException(exc)
                 }
             }
